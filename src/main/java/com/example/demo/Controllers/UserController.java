@@ -2,6 +2,7 @@ package com.example.demo.Controllers;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Pojo.User;
+import com.example.demo.Services.UserService;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
 	
-	private ArrayList<User> people = new ArrayList<>();
+	@Autowired
+	UserService us;
 	
 	/*// Using form-data in postman tool catching seperate params in seperate variable
 	@PostMapping("add")
@@ -28,51 +31,27 @@ public class UserController {
 	
 	@PostMapping("add")
 	public User createUser(@RequestBody User newuser) {
-		User userToUpdateUser = new User(newuser.getName(), newuser.getEmail(), newuser.getPhone(),newuser.getAddress());
-		this.people.add(userToUpdateUser);
-		return userToUpdateUser;
+		return this.us.createUserService(newuser);
 	}
 	
 	@GetMapping("all")
 	public ArrayList<User> getAllUser(){
-		return this.people;
+		return this.us.getAllUsersService();
 	}
 	
 	@GetMapping("details/{id}")
 	public User getDetails(@PathVariable("id") int id) {
-		for (User user : people) {
-			if(user.getId()==id) {
-				return user;
-			}
-		}
-		return null;
+		return us.getDetailsService(id);
 	}
-	
 	
 	@DeleteMapping("delete/{id}")
 	public Boolean deleteUser(@PathVariable("id") int id) {
-		for (User user : people) {
-			if(user.getId()==id) {
-				return people.remove(user);
-			}
-		}
-		return false;
+		return this.us.deleteUserService(id);
 	}
 	
 	@PutMapping("update")
-	public Boolean updateUser(@RequestBody User newUser) {
-		
-		for (User user : people) {
-			if(user.getId()==newUser.getId()) {
-				user.setName(newUser.getName());
-				user.setEmail(newUser.getEmail());
-				user.setPhone(newUser.getPhone());
-				user.setAddress(newUser.getAddress());
-				return true;
-			}
-		}
-		
-		return false;
+	public Boolean updateUser(@RequestBody User newUser) {	
+		return this.us.updateUserService(newUser);
 	}
 }
 
