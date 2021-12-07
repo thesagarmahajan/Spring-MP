@@ -2,6 +2,7 @@ package com.example.demo.Controllers;
 
 import java.util.ArrayList;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Pojo.User;
 import com.example.demo.Services.UserService;
+import com.example.demo.Services.UserServiceJPA;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
 	
 	@Autowired
-	UserService us;
+	UserServiceJPA us;
+	
+	//UserService us;
 	
 	/*// Using form-data in postman tool catching seperate params in seperate variable
 	@PostMapping("add")
@@ -35,24 +42,20 @@ public class UserController {
 	}
 	
 	@GetMapping("all")
-	public ArrayList<User> getAllUser(){
+	public List<User> getAllUser(){
 		return this.us.getAllUsersService();
 	}
 	
 	@GetMapping("details/{id}")
-	public User getDetails(@PathVariable("id") int id) {
+	public Optional<User> getDetails(@PathVariable("id") int id) {
 		return us.getDetailsService(id);
 	}
 	
 	@DeleteMapping("delete/{id}")
-	public Boolean deleteUser(@PathVariable("id") int id) {
+	public int deleteUser(@PathVariable("id") int id) {
 		return this.us.deleteUserService(id);
 	}
 	
-	@PutMapping("update")
-	public Boolean updateUser(@RequestBody User newUser) {	
-		return this.us.updateUserService(newUser);
-	}
 }
 
 // http://localhost:8080/user/add
