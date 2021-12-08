@@ -56,6 +56,12 @@ public class UserController {
 		return this.us.deleteUserService(id);
 	}
 	
+	@PutMapping("update/{id}")
+	public User updateUser(@RequestBody User u, @PathVariable("id") int id) {
+		return this.us.updateUserServer(u, id);
+	}
+	
+	
 }
 
 // http://localhost:8080/user/add

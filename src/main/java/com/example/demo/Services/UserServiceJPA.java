@@ -39,4 +39,19 @@ public class UserServiceJPA {
 		}
 	}
 	
+	public User updateUserServer(User uToUpdate, int id) {
+		Optional<User> foundUser = this.ud.findById(id);
+		if (foundUser.isPresent()) {
+			User oldUser = foundUser.get();
+			oldUser.setName(uToUpdate.getName());
+			oldUser.setEmail(uToUpdate.getEmail());
+			oldUser.setPhone(uToUpdate.getPhone());
+			oldUser.setAddress(uToUpdate.getAddress());
+			return this.ud.save(oldUser);
+		}
+		else {
+			return null;
+		}
+	}
+	
 }

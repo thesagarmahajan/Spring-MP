@@ -41,7 +41,7 @@ public class UserService {
 		return false;
 	}
 	
-	public Boolean updateUserService(@RequestBody User newUser) {
+	public Boolean updateUserService(User newUser) {
 		for (User user : people) {
 			if(user.getId()==newUser.getId()) {
 				user.setName(newUser.getName());
