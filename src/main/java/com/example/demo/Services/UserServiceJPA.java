@@ -9,20 +9,37 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.demo.Pojo.User;
+import com.example.demo.Pojo.UserView;
 import com.example.demo.dao.UserDao;
+import com.example.demo.dao.UserViewDao;
 
 @Service
 public class UserServiceJPA {
 	
-	@Autowired
 	UserDao ud;
+	UserViewDao uvd;
 	
+	@Autowired
+	public UserServiceJPA(UserDao ud, UserViewDao uvd) {
+		super();
+		this.ud = ud;
+		this.uvd = uvd;
+	}
+
 	public User createUserService(User newuser) {
 		return this.ud.save(newuser);
 	}
 	
 	public List<User> getAllUsersService() {
 		return this.ud.findAll();
+	}
+	
+	public List<UserView> getAllUsersViewService() {
+		return this.uvd.findAll();
+	}
+	
+	public UserView getUserViewByEmail(String email) {
+		return this.uvd.findByEmail(email);
 	}
 	
 	public Optional<User> getDetailsService(int id) {

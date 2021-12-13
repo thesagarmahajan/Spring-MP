@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Pojo.User;
+import com.example.demo.Pojo.UserView;
 import com.example.demo.Services.UserService;
 import com.example.demo.Services.UserServiceJPA;
 
@@ -44,6 +45,16 @@ public class UserController {
 	@GetMapping("all")
 	public List<User> getAllUser(){
 		return this.us.getAllUsersService();
+	}
+	
+	@GetMapping("view/all")
+	public List<UserView> getAllUserView(){
+		return this.us.getAllUsersViewService();
+	}
+	
+	@GetMapping("view/details/{email}")
+	public UserView getUserByEmail(@PathVariable String email){
+		return this.us.getUserViewByEmail(email);
 	}
 	
 	@GetMapping("details/{id}")
