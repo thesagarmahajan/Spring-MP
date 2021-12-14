@@ -1,9 +1,11 @@
 package com.example.demo.Controllers;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.Pojo.User;
 import com.example.demo.Pojo.UserView;
@@ -38,13 +41,21 @@ public class UserController {
 	}*/
 	
 	@PostMapping("add")
-	public User createUser(@RequestBody User newuser) {
-		return this.us.createUserService(newuser);
+	public ResponseEntity createUser(@RequestBody User newuser) {
+		User createdUser = this.us.createUserService(newuser);
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("user/add").toUriString());
+		return ResponseEntity.created(uri).body(createdUser);
 	}
 	
 	@GetMapping("all")
-	public List<User> getAllUser(){
-		return this.us.getAllUsersService();
+	public ResponseEntity<List<User>>  getAllUser(){
+		List<User> allUsers = this.us.getAllUsersService();
+		if(allUsers.size()>0) {
+			return ResponseEntity.ok(allUsers);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
 	}
 	
 	@GetMapping("view/all")
@@ -58,9 +69,17 @@ public class UserController {
 	}
 	
 	@GetMapping("details/{id}")
-	public Optional<User> getDetails(@PathVariable("id") int id) {
-		return us.getDetailsService(id);
+	public ResponseEntity getDetails(@PathVariable("id") int id) {
+		Optional<User> foundUser  = this.us.getDetailsService(id);
+		if(foundUser.isPresent()) {
+			return ResponseEntity.ok(foundUser);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
 	}
+	
+	
 	
 	@DeleteMapping("delete/{id}")
 	public int deleteUser(@PathVariable("id") int id) {
